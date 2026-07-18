@@ -22,25 +22,51 @@
 // Outside/Above the return block: This is the core Client JS. It defines the live brain, state, and actions of the component.
 
 import Link from "next/link"
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { useRouter } from "next/navigation" // This is the correct import file according to the latest nextjs version. The useRouter hook allows you to programmatically change routes inside Client Components.
 import { Axios } from "axios"
+import toast , {Toaster} from "react-hot-toast"
 
-export default function LoginPage() {
-    // here we are defining which values we will be working on in the useState and setting their initial default values, in this case we are defining a user object which will containn the following fields and these will be modified and utilised according to out requirements, intially we only need these three fields to signup a user on the signup page
+ // here we are defining which values we will be working on in the useState and setting their initial default values, in this case we are defining a user object which will containn the following fields and these will be modified and utilised according to out requirements, intially we only need these three fields to signup a user on the signup page
+export default function SignupPage() {
+    // when the user is signedUp i want to push him onto the login page and to do that we will use the useRouter()
+    const router = useRouter()
     const [user, setUser] = useState({
         username: "",
         email: "",
         password: ""
     })
 
-    // we need a method to talk to the database so it would be an async method and  
+    // we are creating another variable which can be used for two things like keeping the submit button locked while the page sends the data so the user does not accidently sends the same data twice and also locks the submit button until the user types the correct information
+    const [buttonDisabled, setButtonDisabled] = useState(false)
+    const [loading, setLoading] = useState(false)
+
+    // we need a method to talk to the database so it would be an async method and this will run on the server   
     const onSignup = async () => {
+        try {
+            
+        } catch (error: any) {
+            console.log("Signup failed" , error.message);
+            toast.error("There is an error")
+        }
+        // the finally executes everytime the try catch block runs whether an error happened or it was successful 
+        finally {
+            setLoading(false)
+        }
     }
+
+    //  this check will run whenever there is a change in the user object and if the conditional check is passed then the setButtonDisabled field is set to false and the user will be allowed to submit
+    useEffect(() => {
+        if (user.email.length > 0 && user.password.length > 0 && user.username.length > 0){
+            setButtonDisabled(false)
+        } else {
+            setButtonDisabled(true)
+        }
+    }, [user])
 
     return (
         <div className="flex flex-col items-center justify-center min-h-screen py-2">
-            <h1>Signup</h1>
+            <h1>{loading ? "Processing" : "Signup"}</h1>
             <hr />
 
             <div className="flex my-1">
@@ -82,7 +108,7 @@ export default function LoginPage() {
             <button
                 onClick={onSignup} 
                 className="p-2 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:border-gray-600">
-                Signup
+                {buttonDisabled ? "No signup" : "Signup"}
             </button>
             <Link className=" hover:underline" href="/login">Visit Login Page</Link>
 
