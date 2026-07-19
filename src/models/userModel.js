@@ -34,7 +34,8 @@ const userSchema = new mongoose.Schema({
 // forgotPasswordToken : the copy is sent to the database and other to the user/browser/email and now the user will hit a route like forgotPassowrd or something and he will provide this token along with the new password to the api and the api will search in the database for the user document using this token and this will return you the user and the api will match the token and check the expiry and will allow the new password field to be set to the user document password  
 
 // here if the model has already been created then we are choosing from the models array collection of the mongoose and if not then we are creating a brand new model called "User" using the schema "UserSchema" which will eventually be stored in the collection "users" 
-// mongoose.models.users is a reference to a registered Mongoose model for a "users" collection. It is used to check if a model already exists to prevent overwrite errors, or to retrieve the existing model class to perform database operations without re-compiling the schema.
-const User = mongoose.models.users || mongoose.model("User", userSchema);
+// mongoose.models.User is a reference to a registered Mongoose model for a "users" collection. It is used to check if a model already exists to prevent overwrite errors, or to retrieve the existing model class to perform database operations without re-compiling the schema. so the first time it compiles the userschema to create the model but the next time it uses this already created model to initiate the document
+
+const User = mongoose.models.User || mongoose.model("User", userSchema);
 
 export default User;

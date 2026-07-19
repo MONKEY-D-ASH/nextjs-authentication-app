@@ -4,8 +4,9 @@ import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 
 // we are gonna configure all the http request methods for the signup page in this single file and the router will automatically route the request to the appropriate api
-// first thing we do is connect this route file to the database by calling this connect method 
-connect()
+
+// In Next.js, writing your database connect() function directly inside a route file (such as an API route or Server Action) ensures that your backend establishes a database connection only when that specific endpoint is requested.
+connect() 
 
 // since we are talking to the database this is a async function and we are handling the post request that is why we are mentioning the POST method type here and in this function we are handling the request object, although we can handle both the request and the response object just like in the express js 
 export async function POST(request: NextRequest){
@@ -40,8 +41,6 @@ export async function POST(request: NextRequest){
             success: true,
             savedUser
         }, {status: 200})
-
-        
 
     } catch (error : any) {
         // This methods converts the plain javascript data using json.stringify() into a completely formatted web compliant HTTP response object, and the NextResponse is used to send the response to the browser. It automatically attaches the HTTP header Content-Type: application/json
