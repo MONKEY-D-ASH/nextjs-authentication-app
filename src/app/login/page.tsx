@@ -3,7 +3,7 @@
 import Link from "next/link"
 import React, { useEffect, useState } from "react"
 import { useRouter } from "next/navigation" // This is the correct import file according to the latest nextjs version. The useRouter hook allows you to programmatically change routes inside Client Components.
-import Axios from "axios"
+import axios from "axios"
 import toast from "react-hot-toast"
 
  // here we are defining which values we will be working on in the useState and setting their initial default values, in this case we are defining a user object which will containn the following fields and these will be modified and utilised according to out requirements, intially we only need these three fields to signup a user on the signup page
@@ -20,7 +20,7 @@ export default function LoginPage() {
     const onLogin = async () => {
         try {
             setLoading(true);
-            const response = await Axios.post("/api/users/login", user)
+            const response = await axios.post("/api/users/login", user)
             console.log("Login Success", response.data);
             toast.success("Login success")
             router.push("/profile")
