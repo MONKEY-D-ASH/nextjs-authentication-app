@@ -16,6 +16,9 @@ export function proxy(request: NextRequest) {
     return NextResponse.redirect(new URL('/', request.nextUrl)) // this method requires an absolute URL like (https://example.com)and the request.nextUrl extracts the domain name from the incoming request url and then merges the provided path in it and create a new absolute url and passes it into the redirect() and it sends an http response to the browser with an HTTP response with a 307 status code and the browser sees this and abandons the current request and make a new request to the url that we sent it.
   }
 
+  if (!isPublicPath && !token){
+    return NextResponse.redirect(new URL('/login', request.nextUrl)) // redirecting them on the login page for the user to be allowed to access these routes as the user needs to have a token to do this
+  }
 
 }
  
@@ -23,7 +26,7 @@ export function proxy(request: NextRequest) {
 export const config = {
   matcher: [
     '/',
-    '/profile',
+    '/profile/:path*', // this pattern matches any path that starts with this path name 
     '/login',
     '/signup'
   ]
