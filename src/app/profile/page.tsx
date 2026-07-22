@@ -22,7 +22,7 @@ export default function UserProfile() {
     }
 
     const getUserDetails = async () => {
-        const response = await axios.get("/api/users/me")
+        const response = await axios.get("/api/users/me") // this calls a route and that route calls a helper method 
         console.log(response.data);
         setUser(response.data.data._id) // because the information in the response itself is called reponse.data and the field that we require in the data field that we set
     }
@@ -38,16 +38,17 @@ export default function UserProfile() {
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md"
             onClick={logout}
             >
-                Logout
+            Logout
             </button>
+
             <br/>
+
             <button 
             className="bg-green-700 hover:bg-green-900 text-white font-bold py-2 px-4 rounded-md"
             onClick={getUserDetails}
             >
-                Get User Details
+            Get User Details
             </button>
-
         </div>
     )
 }
