@@ -5,7 +5,7 @@ import type { NextRequest } from 'next/server'
 export function proxy(request: NextRequest) {
   const path = request.nextUrl.pathname // extracting the pathname from the request object which is incoming form the browser
 
-  const isPublicPath = path === '/login' || path === '/signup' // these two path should not be visible to the user after they are logged in, and to know that we know that they have a token in their cookies 
+  const isPublicPath = path === '/login' || path === '/signup' || path === '/verifyemail' // these two path should not be visible to the user after they are logged in, and to know that we know that they have a token in their cookies 
 
 // we know that the incoming http request that we are sending from the the frontend using axios contains the cookie object inside it which it includes in the request automatically becasue we are sending the request on the same domain 
   const token = request.cookies.get('token')?.value || ""
@@ -28,7 +28,8 @@ export const config = {
     '/',
     '/profile/:path*', // this pattern matches any path that starts with this path name 
     '/login',
-    '/signup'
+    '/signup',
+    '/verifyemail'
   ]
 }
 // This is a matcher option that allows you to target specific paths for the Proxy to run on.

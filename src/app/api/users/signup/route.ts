@@ -2,6 +2,7 @@ import { connect } from "@/dbConfig/dbConfig";
 import User from "@/models/userModel.js"
 import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
+import { sendEmail } from "@/helpers/mailer";
 
 // we are gonna configure all the http request methods for the signup page in this single file and the router will automatically route the request to the appropriate api
 
@@ -36,6 +37,9 @@ export async function POST(request: NextRequest){
         const savedUser = await newUser.save()
         console.log(savedUser);
 
+        // send verification email : what we are doing here is that we are using the email that we took from the body of this http request and them sending it to the sendEmail helper with the rest of the required arguments, this email will be sent to the user as soon as the user hits this signup route.
+        await sendEmail({email, emailType: "VERIFY",userId: savedUser._id})
+
         return NextResponse.json({
             message: "User created successfully",
             success: true,
@@ -44,7 +48,7 @@ export async function POST(request: NextRequest){
 
     } catch (error : any) {
         // This methods converts the plain javascript data using json.stringify() into a completely formatted web compliant HTTP response object, and the NextResponse is used to send the response to the browser. It automatically attaches the HTTP header Content-Type: application/json
-        return NextResponse.json({error: error.message},
+        return NextResponse.json({error: error},
             {status: 500})
     }
 }

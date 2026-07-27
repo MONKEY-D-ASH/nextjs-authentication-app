@@ -45,7 +45,7 @@ export default function SignupPage() {
     const onSignup = async () => {
         try {
             setLoading(true)
-            const response = await axios.post("/api/users/signup", user) // we are making a http post request to the singup route along with the user data that we grabbed here from the user
+            const response = await axios.post("/api/users/signup", user) // we are making a http post request to the singup route along with the user data that we grabbed here from the user            
             console.log("signup success", response.data,);
             toast.success("User Signup successful"); // react toast for successful signup
             router.push("/login"); // after successfully signing up the user we want to take the user to the login page
