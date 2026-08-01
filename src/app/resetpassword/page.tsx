@@ -3,8 +3,8 @@
 // this page appears to the user after he clicks the link in the that is sent to him on the email for reseting the password and when the user clicks on the link he will be directed to this resetpassword page on which he will enter the new password and the new password will be hashed and will be stored in the user database and after all this action the user will be directed to the login page for login
 
 import axios from "axios"
-import { getNextConfigRuntime } from "next/dist/server/config-shared"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import React, { useEffect, useState } from "react"
 import toast from "react-hot-toast"
 
@@ -14,15 +14,22 @@ export default function verifyEmailPage(){
         newPassword: "",
         confirmPassword: ""
     });
+    const router = useRouter()
 
     const resetUserPassword = async () => {
         try {
-            // sending both token and password for processig in the resetpassword route
-            const response = await axios.post("/api/users/resetpassword", {token, password})
-            toast.success("email verified");    
+            // sending both token and password for processig in the resetpassword route 
+        if (password.newPassword !== password.confirmPassword) {
+            throw new Error("Both fields must be Identical");
+        }
+        const response = await axios.post("/api/users/resetpassword", {token, password})
+        console.log(response.data);
+        toast.success("password reset success");
+        router.push("/login");
         } catch (error: any) {
             console.log("There is an error: ", error.message);
-            toast.error("Email verification failed");
+            toast(error.message)
+            toast.error("Password Reset Failed");
         }
     }
 
@@ -36,7 +43,7 @@ export default function verifyEmailPage(){
 
     // initially the token is empty but as soon as we change the token in the above useEffect it this useEffect will run immediately verifying the user
     useEffect(() => {
-        if (token.length > 0) {
+        if (token.length > 0 && password.newPassword.length > 0 && password.confirmPassword.length > 0) {
             resetUserPassword();
         }
     }, [token])
@@ -49,7 +56,7 @@ export default function verifyEmailPage(){
             <br />
                 <div className="flex ">
                     <label className="my-1 mx-5">new password</label>
-                    <input type="text"
+                    <input type="password"
                     placeholder="new password"
                     value={password.newPassword}
                     onChange={(e) => setPassword({...password, newPassword: e.target.value})}
@@ -59,8 +66,8 @@ export default function verifyEmailPage(){
             <br />
                 <div className="flex ">
                     <label className="my-1 mx-2">confirm password</label>
-                    <input type="text"
-                    placeholder="new password"
+                    <input type="password"
+                    placeholder="confirm new password"
                     value={password.confirmPassword}
                     onChange={(e) => setPassword({...password, confirmPassword: e.target.value})}
                     className="bg-white text-gray-900 rounded-sm p-0.5"

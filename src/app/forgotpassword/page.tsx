@@ -9,12 +9,14 @@ import toast from "react-hot-toast"
 
 export default function forgotpassword(){
     const [email, setEmail] = useState("")
+    const router = useRouter();
 
     const changePassword = async () => {
         try {
-            const response = await axios.post("/api/users/forgotpassword", email);
+            const response = await axios.post("/api/users/forgotpassword", {email});
             console.log("verification email sent", response.data);
             toast.success("email sent successfully")
+            router.push("/resetpassword")        
         } catch (error: any) {
             console.log("There is an error while changing password", error);
             toast.error("change password failed")

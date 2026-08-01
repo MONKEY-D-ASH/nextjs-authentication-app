@@ -16,7 +16,7 @@ export const sendEmail = async({email, emailType, userId}: any) => {
         } else if (emailType === "RESET") {
             await User.findByIdAndUpdate(userId, 
             {forgotPasswordToken: hashedToken,
-            frogotPasswordTokenExpiry: Date.now() + 3600000})
+            forgotPasswordTokenExpiry: Date.now() + 3600000})
         }
         
         const transporter = nodemailer.createTransport({
