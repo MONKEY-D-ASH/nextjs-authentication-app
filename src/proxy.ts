@@ -5,13 +5,14 @@ import type { NextRequest } from 'next/server'
 export function proxy(request: NextRequest) {
   const path = request.nextUrl.pathname // extracting the pathname from the request object which is incoming form the browser
 
-  const isPublicPath = path === '/login' || path === '/signup' || path === '/verifyemail' // these two path should not be visible to the user after they are logged in, and to know that we know that they have a token in their cookies 
+  
+  const isPublicPath = path === '/' || path === '/login' || path === '/signup' || path === '/verifyemail' // these paths should not be visible to the user after they are logged in, and to know that we know that they have a token in their cookies, we are doing this because after login or signup or verifying their email they have no reason to go back to these paths again.
 
 // we know that the incoming http request that we are sending from the the frontend using axios contains the cookie object inside it which it includes in the request automatically becasue we are sending the request on the same domain 
   const token = request.cookies.get('token')?.value || ""
 
 // now based on these two information we can decide whether we want to let the user to make the api call or not
-  if( isPublicPath && token ){
+  if( (path === '/login' || path === '/signup' || path === '/verifyemail') && token ){
     // this is a server side nextjs method to redirect the user to a different page, like the useRouter.push() method for the client side redirecting as it is a react hook and will only work on the client side 
     return NextResponse.redirect(new URL('/', request.nextUrl)) // this method requires an absolute URL like (https://example.com)and the request.nextUrl extracts the domain name from the incoming request url and then merges the provided path in it and create a new absolute url and passes it into the redirect() and it sends an http response to the browser with an HTTP response with a 307 status code and the browser sees this and abandons the current request and make a new request to the url that we sent it.
   }
